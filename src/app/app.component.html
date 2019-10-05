@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div *ngFor="let inputFiled of inputFields; let i = index"
+           style="margin-bottom: 10px">
+        <label for="inputFiled.name" class="col-xs-3"> {{inputFiled.name}}</label>
+        <input type="text"
+               id="inputFiled.name"
+               class="col-xs-4"
+               [(ngModel)]="inputFiled.value" (change)="onValueChanged(i)"/>
+        <input type="checkbox"
+               style="margin-left: 5px;"
+               [checked]="inputFiled.isChecked"
+               (change)="includeAsPlaceholder(i)">
+      </div>
+      <app-placeholder-box #placeholderContainer></app-placeholder-box>
+  </div>
+  </div>
+</div>
