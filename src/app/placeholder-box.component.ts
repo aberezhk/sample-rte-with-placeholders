@@ -2,16 +2,7 @@ import {ApplicationRef, Component, ComponentRef, ElementRef, EmbeddedViewRef, On
 
 @Component({
   selector: 'app-placeholder-box',
-  template: `
-      <div #placeholderContainer contenteditable="true" (click)="setCaret() ">
-      </div>`,
-  styles: [`div {
-      overflow-y: scroll;
-      height: 200px;
-      min-width: 400px;
-      border-style: solid;
-      display: inline-block;
-  }`]
+  templateUrl: './placeholder-box.component.html'
 })
 export class PlaceholderBoxComponent implements OnInit {
 
@@ -35,10 +26,8 @@ export class PlaceholderBoxComponent implements OnInit {
       const newLi = document.createElement('li');
       this.container.nativeElement.insertAdjacentElement('beforeend', newLi);
       newLi.insertAdjacentElement('beforeend', domElem);
-      // this.container.nativeElement.insertAdjacentElement('beforeend', domElem);
     }
     domElem.insertAdjacentHTML('afterend', '<span>&nbsp;</span>');
-    // this.container.nativeElement.insertAdjacentHTML('beforeend', '<span>&nbsp;</span>');
   }
 
   removePlaceholder(componentRef: ComponentRef<any>) {

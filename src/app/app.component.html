@@ -1,19 +1,38 @@
-<div class="container">
-  <div class="row">
-    <div class="col-xs-12">
-      <div *ngFor="let inputFiled of inputFields; let i = index"
-           style="margin-bottom: 10px">
-        <label for="inputFiled.name" class="col-xs-3"> {{inputFiled.name}}</label>
-        <input type="text"
-               id="inputFiled.name"
-               class="col-xs-4"
-               [(ngModel)]="inputFiled.value" (change)="onValueChanged(i)"/>
-        <input type="checkbox"
-               style="margin-left: 5px;"
-               [checked]="inputFiled.isChecked"
-               (change)="includeAsPlaceholder(i)">
+<div style="font-family: Courier,fantasy">
+  <p>Example of content-editable div container with an option to include values from input boxes</p>
+  <ul>
+    <li>When editor box is empty new values will be inserted as li elements</li>
+    <li>When editor is not empty elements will be inserted normally</li>
+    <li>To insert a value from input, add some value to input box and click check-box next to it => inserted text is
+      <span style="color: royalblue">blue</span></li>
+    <li>Value is inserted to the last caret location (place of last click) within the editor</li>
+    <li>Change value in input box => value in editor is updated automatically and remains blue</li>
+    <li>Change inserted value in the editor => value is now <span style="color: hotpink">pink</span> and updates from
+      input box will be disregarded
+    </li>
+    <li>Update value so that one in input box matches the one in the editor => value is blue and linked again</li>
+    <li>To remove the inserted value uncheck corresponding checkbox</li>
+  </ul>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div *ngFor="let inputFiled of inputFields; let i = index"
+             style="margin-bottom: 20px; align-items: self-start">
+          <div>
+            <label for="inputFiled.name" class="col-xs-3"> {{inputFiled.name}}</label>
+            <input style="border: solid skyblue 1px" type="text"
+                   id="inputFiled.name"
+                   class="col-lg-2"
+                   [(ngModel)]="inputFiled.value" (change)="onValueChanged(i)" appListenToMe
+                   (mouseEntered)="onListenToMe($event, i)"/>
+            <input type="checkbox"
+                   style="margin-left: 5px;"
+                   [checked]="inputFiled.isChecked"
+                   (change)="includeAsPlaceholder(i)">
+          </div>
+          </div>
+          <app-placeholder-box #placeholderContainer></app-placeholder-box>
+        </div>
       </div>
-      <app-placeholder-box #placeholderContainer></app-placeholder-box>
+    </div>
   </div>
-  </div>
-</div>

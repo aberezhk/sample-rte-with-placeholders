@@ -1,28 +1,37 @@
-import {Directive, ElementRef, HostBinding, HostListener, Input, OnInit, Renderer2} from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 
 @Directive({
   selector: '[appListenToMe]'
 })
 export class ListenToMeDirective implements OnInit {
 
-  @Input() color = 'yellow';
+  @Output() mouseEntered: EventEmitter<boolean> = new EventEmitter();
+  @Input() color = 'lightyellow';
   @HostBinding('style.backgroundColor') backgroundColor = 'transparent';
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) {
+  constructor() {
   }
 
-  @HostListener('mouseenter') onMouseEnter(eventData: Event) {
-    // this.renderer.setStyle(this.elementRef.nativeElement, 'backgroundColor', 'yellow');
-    // console.log('Host listener is listening');
+  @HostListener('mouseenter') onMouseEnter() {
+    this.mouseEntered.emit(true);
     this.backgroundColor = this.color;
   }
 
   @HostListener('mouseleave') onMouseLeave() {
-    // this.renderer.setStyle(this.elementRef.nativeElement, 'backgroundColor', 'transparent');
+    this.mouseEntered.emit(false);
     this.backgroundColor = 'transparent';
   }
 
   ngOnInit(): void {
-    this.backgroundColor = 'yellow';
+    this.backgroundColor = 'transparent';
   }
 }

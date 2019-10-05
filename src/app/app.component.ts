@@ -1,9 +1,9 @@
 import {
   Component,
   ComponentFactoryResolver,
-  ComponentRef, Injector,
-  Output,
-  ViewChild, ViewEncapsulation,
+  ComponentRef, ElementRef, Injector,
+  Output, QueryList,
+  ViewChild, ViewChildren, ViewEncapsulation,
 } from '@angular/core';
 import {PlaceholderComponent} from './placeholder.component';
 import {PlaceholderBoxComponent} from './placeholder-box.component';
@@ -11,7 +11,6 @@ import {PlaceholderBoxComponent} from './placeholder-box.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
@@ -29,12 +28,14 @@ export class AppComponent {
     }];
 
   // componentRef: ComponentRef<PlaceholderComponent>;
-  placeholders: {[key: string]: ComponentRef<PlaceholderComponent>} = {};
+  placeholders: { [key: string]: ComponentRef<PlaceholderComponent> } = {};
 
-  constructor(private resolver: ComponentFactoryResolver,  private injector: Injector) {
+  constructor(private resolver: ComponentFactoryResolver, private injector: Injector) {
   }
 
-  @ViewChild('placeholderContainer', {read: PlaceholderBoxComponent , static: true})
+  @ViewChild('input', {static: false}) input: ElementRef;
+
+  @ViewChild('placeholderContainer', {read: PlaceholderBoxComponent, static: false})
   container;
 
   includeAsPlaceholder(index: number) {
@@ -43,6 +44,7 @@ export class AppComponent {
       const componentRef = this.resolver.resolveComponentFactory(PlaceholderComponent).create(this.injector);
       this.container.includePlaceholder(componentRef);
       componentRef.instance.text = this.inputFields[index].value;
+      componentRef.instance.id = index;
       this.placeholders[index] = componentRef;
     } else if (this.placeholders[index]) {
       this.container.removePlaceholder(this.placeholders[index]);
@@ -58,4 +60,12 @@ export class AppComponent {
     }
   }
 
+  onListenToMe($event: boolean, i: number) {
+    if (this.placeholders[i]) {
+      const newEvent = $event ?
+        new MouseEvent('mouseenter', {bubbles: true}) :
+        new MouseEvent('mouseleave');
+      this.placeholders[i].instance.placeholder.nativeElement.dispatchEvent(newEvent);
+    }
+  }
 }
